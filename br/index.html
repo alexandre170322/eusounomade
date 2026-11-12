@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eu Sou Nômade · Inscreva-se</title>
+<meta name="description" content="Inscreva-se no canal Eu Sou Nômade no YouTube.">
+<meta property="og:title" content="Eu Sou Nômade">
+<meta property="og:description" content="Toque para se inscrever no canal no YouTube.">
+<meta property="og:image" content="https://alexandre170322.github.io/eusounomade/br/avatar.jpg">
+<meta name="theme-color" content="#0f0f0f">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #0f0f0f;
+    color: #f1f1f1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color: transparent;
+  }
+  main { width: 100%; max-width: 360px; text-align: center; }
+  .foto {
+    width: 120px; height: 120px; border-radius: 50%;
+    display: block; margin: 0 auto 18px; object-fit: cover;
+    box-shadow: 0 0 0 3px #0f0f0f, 0 0 0 5px #ff0033;
+  }
+  h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.2px; }
+  .arroba { color: #aaa; font-size: 15px; margin-top: 4px; }
+  .botao {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 32px; width: 100%; min-height: 60px; padding: 0 24px;
+    background: #ff0033; color: #fff; border: 0; border-radius: 999px;
+    font: inherit; font-size: 20px; font-weight: 700; text-decoration: none;
+    box-shadow: 0 10px 30px rgba(255, 0, 51, 0.35);
+    transition: transform .12s ease, filter .12s ease;
+    animation: pulso 2.4s ease-in-out infinite;
+  }
+  .botao:active { transform: scale(0.97); filter: brightness(0.92); }
+  .botao svg { width: 26px; height: 26px; flex: none; }
+  @keyframes pulso {
+    0%, 100% { box-shadow: 0 10px 30px rgba(255, 0, 51, 0.35); }
+    50% { box-shadow: 0 10px 40px rgba(255, 0, 51, 0.6); }
+  }
+  @media (prefers-reduced-motion: reduce) { .botao { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <img class="foto" src="avatar.jpg" alt="" width="120" height="120">
+  <h1>Eu Sou Nômade</h1>
+  <p class="arroba">@EUSOUNOMADE_BR</p>
+  <a class="botao" id="inscrever" href="https://www.youtube.com/channel/UCCOiAHytpt-L5AGfqd9VKWg?sub_confirmation=1" rel="noopener">
+    <svg viewBox="0 0 28 20" aria-hidden="true"><path fill="#fff" d="M27.4 3.1A3.5 3.5 0 0 0 24.9.6C22.7 0 14 0 14 0S5.3 0 3.1.6A3.5 3.5 0 0 0 .6 3.1C0 5.3 0 10 0 10s0 4.7.6 6.9a3.5 3.5 0 0 0 2.5 2.5C5.3 20 14 20 14 20s8.7 0 10.9-.6a3.5 3.5 0 0 0 2.5-2.5C28 14.7 28 10 28 10s0-4.7-.6-6.9Z"/><path fill="#ff0033" d="m11.2 14.3 7.3-4.3-7.3-4.3v8.6Z"/></svg>
+    Inscreva-se
+  </a>
+</main>
+<script>
+  // Abre o canal direto no app do YouTube, mesmo dentro do navegador do Instagram.
+  (function () {
+    var ID = 'UCCOiAHytpt-L5AGfqd9VKWg';
+    var caminho = 'www.youtube.com/channel/' + ID + '?sub_confirmation=1';
+    var web = 'https://' + caminho;
+    var ua = navigator.userAgent || '';
+    var android = /Android/i.test(ua);
+    var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    document.getElementById('inscrever').addEventListener('click', function (e) {
+      if (!android && !ios) return; // computador: segue o link normal
+
+      e.preventDefault();
+      if (android) {
+        // Intent do Android: abre o app; se não tiver o app, abre o site.
+        location.href = 'intent://' + caminho +
+          '#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=' +
+          encodeURIComponent(web) + ';end';
+        return;
+      }
+
+      // iPhone: tenta o app; se a página continuar aberta, abre o site.
+      var saiu = false;
+      var marcar = function () { if (document.hidden) saiu = true; };
+      document.addEventListener('visibilitychange', marcar);
+      window.addEventListener('pagehide', function () { saiu = true; });
+      location.href = 'youtube://' + caminho;
+      setTimeout(function () {
+        document.removeEventListener('visibilitychange', marcar);
+        if (!saiu && !document.hidden) location.href = web;
+      }, 1600);
+    });
+  })();
+</script>
+</body>
+</html>
